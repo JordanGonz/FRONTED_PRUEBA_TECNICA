@@ -57,11 +57,11 @@ export class RegistroCargosComponent implements OnInit {
       email: '',
     });
 
-    // Cargar departamentos
+   
   this.departamentoService.tDepartamentos().subscribe(
     (response: ApiResponse<Departamento[]>) => { 
-      if (response && Array.isArray(response.data)) { // Verifica que 'response.data' es un array
-        this.departamentos = response.data; // Asigna `response.data` a `departamentos`
+      if (response && Array.isArray(response.data)) { 
+        this.departamentos = response.data; 
         console.log('Departamentos:', this.departamentos); 
       } else {
         console.error('Error: La respuesta de departamentos no es un array.', response);
@@ -72,11 +72,11 @@ export class RegistroCargosComponent implements OnInit {
     }
   );
 
-  // Cargar cargos
+ 
   this.cargoService.tCargos().subscribe(
     (response: ApiResponse<Cargo[]>) => {
-      if (response && Array.isArray(response.data)) { // Verifica que 'response.data' es un array
-        this.cargos = response.data; // Asigna `response.data` a `cargos`
+      if (response && Array.isArray(response.data)) { 
+        this.cargos = response.data; 
         console.log('Cargos:', this.cargos); 
       } else {
         console.error('Error: La respuesta de cargos no es un array.', response);
@@ -199,22 +199,12 @@ export class RegistroCargosComponent implements OnInit {
   }
 
 
-  /* openModal(): void {
-    const dialogRef = this.dialog.open(UserDialogComponent, {
-      width: '600px', // Ancho del modal
-    });
-
-    // Suscríbete al cierre del modal si necesitas manejar la respuesta
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('El modal se cerró');
-    });
-
-  } */
+ 
 
     openModal(user?: User): void {
       // Log para verificar el valor del usuario y su id
-      console.log('Usuario a editar:', user); // Muestra el objeto completo
-      console.log('ID del usuario:', user?.id); // Muestra el id del usuario
+      console.log('Usuario a editar:', user); 
+      console.log('ID del usuario:', user?.id);
     
       UserDialogComponent.userData = user || null; 
       const dialogRef = this.dialog.open(UserDialogComponent, {
