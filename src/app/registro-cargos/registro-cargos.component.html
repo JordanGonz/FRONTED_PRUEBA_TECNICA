@@ -1,0 +1,60 @@
+<div class="user-management">
+  <p class="user-management__module-title">Módulo de Administración</p>
+  <h6 class="user-management__title">Administración de usuarios</h6>
+  
+  <!-- Contenedor de Filtros -->
+  <div class="user-management__filter-container">
+    <select class="user-management__filter-select user-management__filter-select--department">
+      <option value="" disabled selected>Seleccione un Departamento</option>
+      <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{ departamento.nombre }}</option>
+    </select>
+
+    <select class="user-management__filter-select user-management__filter-select--role">
+      <option value="" disabled selected>Seleccione un Cargo</option>
+      <option *ngFor="let cargo of cargos" [value]="cargo.id">{{ cargo.nombre }}</option>
+    </select>
+    <button class="user-management__create-button" (click)="openModal()">Crear nuevo usuario</button>
+  </div>
+
+  <!-- Tabla de Usuarios con Datos Quemados -->
+  <div class="user-management__table-container">
+    <table class="user-management__table">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Departamento</th>
+          <th>Cargo</th>
+          <th>segundoApellido</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas de usuarios con datos quemados -->
+        <tr *ngFor="let user of users">
+          <td>{{ user.usuario }}</td>
+          <td>{{ user.primerNombre }}</td>
+          <td>{{ user.primerApellido }}</td>
+          <td>{{(user.idDepartamento) }}</td>
+          <td>{{(user.idCargo)}}</td>
+          <td>{{ user.segundoApellido }}</td>
+          <td>
+            <button class="user-management__action-btn user-management__action-btn--edit" (click)="openModal()">
+                <mat-icon class="icon">edit</mat-icon> Editar
+            </button>
+            <button class="user-management__action-btn user-management__action-btn--delete">
+                <mat-icon class="icon">delete</mat-icon> Eliminar
+            </button>
+        </td>
+        </tr>
+        <!-- Más filas según sea necesario -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Total de Registros -->
+  <div class="user-management__total-records">
+    Total Registros: 10
+  </div>
+</div>

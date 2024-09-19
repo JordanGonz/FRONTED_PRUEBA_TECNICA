@@ -1,0 +1,62 @@
+<div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h2>Registrar usuario</h2>
+      <form [formGroup]="userForm">
+        <!-- Campo Departamento -->
+        <div class="form-group">
+          <label>Departamento:</label>
+          <select formControlName="departamento">
+            <option value="" disabled selected>Seleccione un Departamento</option>
+            <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{ departamento.nombre }}</option>
+          </select>
+        </div>
+    
+        <!-- Campo Cargo -->
+        <div class="form-group">
+          <label>Cargo:</label>
+          <select formControlName="cargo">
+            <option value="" disabled selected>Seleccione un Cargo</option>
+            <option *ngFor="let cargo of cargos" [value]="cargo.id">{{ cargo.nombre }}</option>
+          </select>
+        </div>
+    
+        <!-- Campo Usuario -->
+        <div class="form-group">
+          <label>Usuario:</label>
+          <input type="text" formControlName="usuario">
+        </div>
+    
+    
+        <!-- Campo Primer Nombre -->
+        <div class="form-group">
+          <label>Primer Nombre:</label>
+          <input type="text" formControlName="primerNombre">
+        </div>
+    
+        <!-- Campo Segundo Nombre -->
+        <div class="form-group">
+          <label>Segundo Nombre:</label>
+          <input type="text" formControlName="segundoNombre">
+        </div>
+    
+        <!-- Campo Primer Apellido -->
+        <div class="form-group">
+          <label>Primer Apellido:</label>
+          <input type="text" formControlName="primerApellido">
+        </div>
+    
+        <!-- Campo Segundo Apellido -->
+        <div class="form-group">
+          <label>Segundo Apellido:</label>
+          <input type="text" formControlName="segundoApellido">
+        </div>
+    
+        <!-- Botones de acción -->
+        <div class="modal-actions">
+          <button type="button" class="btn-primary" (click)="onSave()">Registrar</button>
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+</div>
