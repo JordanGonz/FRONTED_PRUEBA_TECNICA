@@ -216,6 +216,16 @@ export class RegistroCargosComponent implements OnInit {
       });
     }
 
+
+    getDepartamentoNombre(idDepartamento: number): string {
+      const departamento = this.departamentos.find(dept => dept.id === Number(idDepartamento)); 
+      return departamento ? departamento.nombre : 'No encontrado';
+    }
+    
+    getCargoNombre(idCargo: number): string {
+      const cargo = this.cargos.find(c => c.id === Number(idCargo)); 
+      return cargo ? cargo.nombre : 'No encontrado';
+    }
     
     
 

@@ -36,8 +36,8 @@
           <td>{{ user.usuario }}</td>
           <td>{{ user.primerNombre }}</td>
           <td>{{ user.primerApellido }}</td>
-          <td>{{(user.idDepartamento) }}</td>
-          <td>{{(user.idCargo)}}</td>
+          <td>{{ getDepartamentoNombre(user.idDepartamento) }}</td>
+          <td>{{ getCargoNombre(user.idCargo) }}</td>
           <td>{{ user.segundoApellido }}</td>
           <td>
             <button class="user-management__action-btn user-management__action-btn--edit" (click)="openModal(user)">
