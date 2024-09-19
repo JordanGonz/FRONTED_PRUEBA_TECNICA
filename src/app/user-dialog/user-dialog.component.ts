@@ -24,6 +24,7 @@ export class UserDialogComponent implements OnInit {
   static userData: User | null = null;
   departamentos: Departamento[] = [];
   cargos: Cargo[] = [];
+  isEditMode: boolean = false; 
 
   constructor(
     private fb: FormBuilder,
@@ -33,6 +34,7 @@ export class UserDialogComponent implements OnInit {
     private userService: UserService 
   ) {
     const user = UserDialogComponent.userData;
+    this.isEditMode = !!user; 
     this.userForm = this.fb.group({
       usuario: [user?.usuario || ''],
       primerNombre: [user?.primerNombre || ''],
@@ -87,30 +89,43 @@ export class UserDialogComponent implements OnInit {
       }
 
       // Crear un nuevo usuario con los nombres de campos que la API espera
-      const newUser = {
-          usuario: this.userForm.value.usuario,
-          primerNombre: this.userForm.value.primerNombre,
-          segundoNombre: this.userForm.value.segundoNombre,
-          primerApellido: this.userForm.value.primerApellido,
-          segundoApellido: this.userForm.value.segundoApellido,
-          idDepartamento: this.userForm.value.departamento, // Asegúrate de que este es el campo correcto
-          idCargo: this.userForm.value.cargo // Asegúrate de que este es el campo correcto
+      const user: User = {
+        usuario: this.userForm.value.usuario,
+        primerNombre: this.userForm.value.primerNombre,
+        segundoNombre: this.userForm.value.segundoNombre,
+        primerApellido: this.userForm.value.primerApellido,
+        segundoApellido: this.userForm.value.segundoApellido,
+        idDepartamento: this.userForm.value.departamento,
+        idCargo: this.userForm.value.cargo 
       };
 
-      console.log('Datos a enviar:', newUser); // Verificar la estructura de los datos enviados
+      console.log('Datos a enviar:', user); 
 
-      this.userService.crearUser(newUser).subscribe(
+
+      if (this.isEditMode) {
+        // Actualizar usuario
+        this.userService.actualizarUser(UserDialogComponent.userData!.id!, user).subscribe(
           (response: any) => {
-              console.log('Usuario creado exitosamente:', response);
-              this.closeModal();
+            console.log('Usuario actualizado exitosamente:', response);
+            this.dialogRef.close(true);
           },
           (error: any) => {
-              console.error('Error al crear usuario:', error);
-              if (error.error) {
-                  console.error('Detalles del error:', error.error);
-              }
+            console.error('Error al actualizar usuario:', error);
           }
-      );
-     }
+        );
+      } else {
+        // Crear usuario
+        this.userService.crearUser(user).subscribe(
+          (response: any) => {
+            console.log('Usuario creado exitosamente:', response);
+            this.dialogRef.close(true); 
+          },
+          (error: any) => {
+            console.error('Error al crear usuario:', error);
+          }
+        );
+      }
 
+    }
+      
 }
