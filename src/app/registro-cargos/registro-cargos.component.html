@@ -40,10 +40,10 @@
           <td>{{(user.idCargo)}}</td>
           <td>{{ user.segundoApellido }}</td>
           <td>
-            <button class="user-management__action-btn user-management__action-btn--edit" (click)="openModal()">
+            <button class="user-management__action-btn user-management__action-btn--edit" (click)="openModal(user)">
                 <mat-icon class="icon">edit</mat-icon> Editar
             </button>
-            <button class="user-management__action-btn user-management__action-btn--delete">
+            <button class="user-management__action-btn user-management__action-btn--delete"(click)="deleteUser(user)">
                 <mat-icon class="icon">delete</mat-icon> Eliminar
             </button>
         </td>

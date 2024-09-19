@@ -14,6 +14,7 @@ import { ApiResponse } from '../../../interfaces/http-response.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog'; 
+import { ConfirmDialogComponent } from '../../app/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -152,18 +153,22 @@ export class RegistroCargosComponent implements OnInit {
     this.selectedUser = user;
   }
 
-  deleteUser(user: User) {
-    if (confirm('¿Estás seguro de eliminar este usuario?')) {
-      this.userService.eliminarUser(user.id!).subscribe(
-        () => {
-          this.users = this.users.filter(u => u.id !== user.id);
-          Swal.fire('Usuario eliminado', 'El usuario ha sido eliminado con éxito', 'success');
-        },
-        (error) => {
-          console.error('Error al eliminar usuario:', error);
-        }
-      );
-    }
+  deleteUser(user: User): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.eliminarUser(user.id!).subscribe(
+          () => {
+            this.users = this.users.filter(u => u.id !== user.id);
+            console.log('Usuario eliminado con éxito');
+          },
+          (error) => {
+            console.error('Error al eliminar usuario:', error);
+          }
+        );
+      }
+    });
   }
 
   cancelEdit() {
@@ -220,6 +225,8 @@ export class RegistroCargosComponent implements OnInit {
         console.log('El modal se cerró');
       });
     }
+
+    
     
 
 }

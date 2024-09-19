@@ -8,6 +8,7 @@ import { CargoServiceService } from '../../../core/services/cargo.service';
 import { Departamento } from '../../../interfaces/models/departamento.models';
 import { Cargo } from '../../../interfaces/models/cargo.models';
 import { ApiResponse } from '../../../interfaces/http-response.interface';
+import { UserService } from '../../../core/services/user.service';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class UserDialogComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<UserDialogComponent>,
     private departamentoService: DepartamentoService,  
-    private cargoService: CargoServiceService    
+    private cargoService: CargoServiceService,
+    private userService: UserService 
   ) {
     const user = UserDialogComponent.userData;
     this.userForm = this.fb.group({
@@ -46,8 +48,8 @@ export class UserDialogComponent implements OnInit {
     // Cargar departamentos
     this.departamentoService.tDepartamentos().subscribe(
       (response: ApiResponse<Departamento[]>) => { 
-        if (response && Array.isArray(response.data)) { // Verifica que 'response.data' es un array
-          this.departamentos = response.data; // Asigna `response.data` a `departamentos`
+        if (response && Array.isArray(response.data)) { 
+          this.departamentos = response.data; 
           console.log('Departamentos:', this.departamentos); 
         } else {
           console.error('Error: La respuesta de departamentos no es un array.', response);
@@ -61,8 +63,8 @@ export class UserDialogComponent implements OnInit {
     // Cargar cargos
     this.cargoService.tCargos().subscribe(
       (response: ApiResponse<Cargo[]>) => {
-        if (response && Array.isArray(response.data)) { // Verifica que 'response.data' es un array
-          this.cargos = response.data; // Asigna `response.data` a `cargos`
+        if (response && Array.isArray(response.data)) { 
+          this.cargos = response.data; 
           console.log('Cargos:', this.cargos); 
         } else {
           console.error('Error: La respuesta de cargos no es un array.', response);
@@ -78,9 +80,37 @@ export class UserDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSave() {
-   
-    this.dialogRef.close(this.userForm.value); 
-  }
+    onSave(): void {
+      if (this.userForm.invalid) {
+          console.error('Formulario inválido');
+          return;
+      }
+
+      // Crear un nuevo usuario con los nombres de campos que la API espera
+      const newUser = {
+          usuario: this.userForm.value.usuario,
+          primerNombre: this.userForm.value.primerNombre,
+          segundoNombre: this.userForm.value.segundoNombre,
+          primerApellido: this.userForm.value.primerApellido,
+          segundoApellido: this.userForm.value.segundoApellido,
+          idDepartamento: this.userForm.value.departamento, // Asegúrate de que este es el campo correcto
+          idCargo: this.userForm.value.cargo // Asegúrate de que este es el campo correcto
+      };
+
+      console.log('Datos a enviar:', newUser); // Verificar la estructura de los datos enviados
+
+      this.userService.crearUser(newUser).subscribe(
+          (response: any) => {
+              console.log('Usuario creado exitosamente:', response);
+              this.closeModal();
+          },
+          (error: any) => {
+              console.error('Error al crear usuario:', error);
+              if (error.error) {
+                  console.error('Detalles del error:', error.error);
+              }
+          }
+      );
+     }
 
 }
