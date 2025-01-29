@@ -6,8 +6,8 @@
         <!-- Campo Departamento -->
         <div class="form-group">
           <label>Departamento:</label>
-          <select formControlName="departamento">
-            <option value="" disabled selected>Seleccione un Departamento</option>
+          <select formControlName="departamento" class ="select-seleccion">
+            <option value="" disabled selected><strong>Seleccione un Departamento</strong> </option>
             <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{ departamento.nombre }}</option>
           </select>
         </div>
@@ -15,7 +15,7 @@
         <!-- Campo Cargo -->
         <div class="form-group">
           <label>Cargo:</label>
-          <select formControlName="cargo">
+          <select formControlName="cargo"  class ="select-seleccion">
             <option value="" disabled selected>Seleccione un Cargo</option>
             <option *ngFor="let cargo of cargos" [value]="cargo.id">{{ cargo.nombre }}</option>
           </select>
