@@ -36,6 +36,8 @@ export class RegistroCargosComponent implements OnInit {
   selectedUser: User | null = null;
   userForm!:FormGroup;
 
+  selectedDepartamentoId: number | null = null;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
@@ -62,7 +64,6 @@ export class RegistroCargosComponent implements OnInit {
     (response: ApiResponse<Departamento[]>) => { 
       if (response && Array.isArray(response.data)) { 
         this.departamentos = response.data; 
-        console.log('Departamentos:', this.departamentos); 
       } else {
         console.error('Error: La respuesta de departamentos no es un array.', response);
       }
@@ -77,7 +78,6 @@ export class RegistroCargosComponent implements OnInit {
     (response: ApiResponse<Cargo[]>) => {
       if (response && Array.isArray(response.data)) { 
         this.cargos = response.data; 
-        console.log('Cargos:', this.cargos); 
       } else {
         console.error('Error: La respuesta de cargos no es un array.', response);
       }
@@ -91,19 +91,25 @@ export class RegistroCargosComponent implements OnInit {
     this.loadUsers();
   }
 
+  applyFilters() {
+    this.filteredUsers = this.users.filter(user => {
+      const userDepartamentoId = Number(user.idDepartamento);
+      return (!this.selectedDepartamentoId || userDepartamentoId === this.selectedDepartamentoId);
+    });
+  }
   
-
   loadUsers() {
     this.userService.tUsers().subscribe(
-      (response: any) => { 
-        console.log('Respuesta de la API:', response);
-        this.users = response.data; 
+      (response: any) => {
+        this.users = response.data;
+        this.filteredUsers = [...this.users];
       },
       (error) => {
         console.error('Error al cargar los usuarios:', error);
       }
     );
   }
+  
 
 
   onSubmit() {
@@ -180,29 +186,23 @@ export class RegistroCargosComponent implements OnInit {
 
 
   onDepartamentoChange(event: Event) {
-    const selectedDepartamentoId = +(event.target as HTMLSelectElement).value;
-    if (selectedDepartamentoId) {
-      this.filteredUsers = this.users.filter(user => user.idDepartamento === selectedDepartamentoId);
-    } else {
-      this.filteredUsers = [...this.users]; 
-    }
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedDepartamentoId = value ? Number(value) : null;
+    this.applyFilters();
   }
+  
 
 
   onCargoChange(event: Event) {
-    const selectedCargoId = +(event.target as HTMLSelectElement).value;
+    const selectedCargoId = Number((event.target as HTMLSelectElement).value); 
     if (selectedCargoId) {
-      this.filteredUsers = this.users.filter(user => user.idCargo === selectedCargoId);
+      this.filteredUsers = this.users.filter(user => Number(user.idCargo) === selectedCargoId);
     } else {
       this.filteredUsers = [...this.users]; 
     }
   }
-
-
- 
-
+  
     openModal(user?: User): void {
-      // Log para verificar el valor del usuario y su id
       console.log('Usuario a editar:', user); 
       console.log('ID del usuario:', user?.id);
     
@@ -225,8 +225,6 @@ export class RegistroCargosComponent implements OnInit {
     getCargoNombre(idCargo: number): string {
       const cargo = this.cargos.find(c => c.id === Number(idCargo)); 
       return cargo ? cargo.nombre : 'No encontrado';
-    }
-    
-    
+    } 
 
 }

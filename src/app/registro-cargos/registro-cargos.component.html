@@ -4,13 +4,13 @@
   
   <!-- Contenedor de Filtros -->
   <div class="user-management__filter-container">
-    <select class="user-management__filter-select user-management__filter-select--department">
-      <option value="" disabled selected>Seleccione un Departamento</option>
+    <select class="user-management__filter-select user-management__filter-select--department"  (change)="onDepartamentoChange($event)">
+      <option value=""  selected>Seleccione un Departamento</option>
       <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{ departamento.nombre }}</option>
     </select>
 
-    <select class="user-management__filter-select user-management__filter-select--role">
-      <option value="" disabled selected>Seleccione un Cargo</option>
+    <select class="user-management__filter-select user-management__filter-select--role" (change)="onCargoChange($event)">
+      <option value=""  selected>Seleccione un Cargo</option>
       <option *ngFor="let cargo of cargos" [value]="cargo.id">{{ cargo.nombre }}</option>
     </select>
     <button class="user-management__create-button" (click)="openModal()">Crear nuevo usuario</button>
@@ -32,7 +32,7 @@
       </thead>
       <tbody>
         <!-- Filas de usuarios con datos quemados -->
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of filteredUsers">
           <td>{{ user.usuario }}</td>
           <td>{{ user.primerNombre }}</td>
           <td>{{ user.primerApellido }}</td>
